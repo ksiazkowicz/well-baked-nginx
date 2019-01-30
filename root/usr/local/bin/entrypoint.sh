@@ -22,10 +22,10 @@ if [ -f "$SSL_PEM_PATH" ] && [ -f "$SSL_KEY_PATH" ]; then
     export PROTOCOL="443 ssl"
     envsubst '$$APP_SERVER_NAME $$SSL_PEM_PATH $$SSL_KEY_PATH' < /etc/nginx/conf.d/ssl.conf.template > /etc/nginx/conf.d/ssl.conf
     if [ $USE_LETSENCRYPT=1 ]; then
-        echo include /etc/letsencrypt/options-ssl-nginx.conf >> /etc/nginx/conf.d/ssl.conf
-        echo ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem >> /etc/nginx/conf.d/ssl.conf
+        echo include /etc/letsencrypt/options-ssl-nginx.conf; >> /etc/nginx/conf.d/ssl.conf
+        echo ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; >> /etc/nginx/conf.d/ssl.conf
     else
-        echo include /etc/nginx/options-ssl.nginx.conf >> /etc/nginx/conf.d/ssl.conf
+        echo include /etc/nginx/options-ssl.nginx.conf; >> /etc/nginx/conf.d/ssl.conf
     fi
 else
     export PROTOCOL="80"
