@@ -1,0 +1,40 @@
+server {
+    listen ${PROTOCOL};
+    charset utf-8;
+    server_name  ${APP_SERVER_NAME};
+
+    keepalive_timeout   70;
+
+    gzip  on;
+    gzip_vary on;
+    gzip_comp_level 6;
+    gzip_proxied any;
+    gzip_buffers 16 8k;
+    gzip_min_length 1000;
+    gzip_proxied expired no-cache no-store private auth;
+    gzip_types text/plain text/css application/json application/javascript application/x-javascript text/xml application/xml application/xml+rss text/javascript;
+
+    default_type  application/octet-stream;
+    
+    access_log  /var/log/nginx/access.log;
+    error_log  /var/log/nginx/error.log info;
+    
+    client_max_body_size 4G;
+    large_client_header_buffers 4 16k;
+
+    auth_basic ${APP_AUTH_BASIC};
+    auth_basic_user_file /etc/nginx/.htpasswd;
+        
+    ## Deny illegal Host headers
+    if ($host !~* ^(${APP_SERVER_NAME}|www.${APP_SERVER_NAME})$ ) {
+        return 444;
+    }
+
+    root   /var/www;
+    index  index.html index.htm;
+    include /etc/nginx/mime.types;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}

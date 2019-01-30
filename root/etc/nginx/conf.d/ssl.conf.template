@@ -1,0 +1,19 @@
+# SSL settings
+ssl_certificate           ${SSL_PEM_PATH};
+ssl_certificate_key       ${SSL_KEY_PATH};
+
+# redirects
+# WWW redirects
+server {
+    listen      80;
+    listen      443 ssl;
+    server_name www.${APP_SERVER_NAME};
+    return 301 https://${APP_SERVER_NAME}$request_uri;
+}
+
+# HTTPS redirects
+server {
+    listen      80;
+    server_name ${APP_SERVER_NAME};
+    return 301 https://$server_name$request_uri;
+}
